@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
 import './index.css'
+import PropTypes from 'prop-types';
 class Comment extends Component {
+    static propType={
+        comment: PropTypes.object.isRequired,
+        onDeleteComment: PropTypes.func,
+        index: PropTypes.number
+    }
     constructor() {
         super()
         this.state = {
@@ -15,6 +21,11 @@ class Comment extends Component {
                 ? `${Math.round(duration / 60)} 分钟前`
                 : `${Math.round(Math.max(duration, 1))} 秒前`
         })
+    }
+    handleDeleteComment(){
+        if(this.props.onDeleteComment){
+            this.props.onDeleteComment(this.props.index)
+        }
     }
     componentWillMount() {
         this._updateTimeString()
@@ -32,6 +43,11 @@ class Comment extends Component {
                 </div>
                 <p>{this.props.comment.content}</p>
                 <span className='comment-createdtime'>{this.state.timeString}</span>
+                <span
+                    onClick={this.handleDeleteComment.bind(this)}
+                    className='comment-delete'>
+                    删除
+                </span>
             </div>
         )
     }
